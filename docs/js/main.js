@@ -69,14 +69,14 @@ var Hero = (function (_super) {
         _this.spriteDown2 = new Image(100, 200);
         _this.spriteRight1 = new Image(100, 200);
         _this.spriteRight2 = new Image(100, 200);
-        _this.spriteUp1.src = '../dist/images/heroup1.png';
-        _this.spriteUp2.src = '../dist/images/heroup2.png';
-        _this.spriteLeft1.src = '../dist/images/heroleft1.png';
-        _this.spriteLeft2.src = '../dist/images/heroleft2.png';
-        _this.spriteDown1.src = '../dist/images/herodown1.png';
-        _this.spriteDown2.src = '../dist/images/herodown2.png';
-        _this.spriteRight1.src = '../dist/images/heroright1.png';
-        _this.spriteRight2.src = '../dist/images/heroright2.png';
+        _this.spriteUp1.src = '../docs/images/heroup1.png';
+        _this.spriteUp2.src = '../docs/images/heroup2.png';
+        _this.spriteLeft1.src = '../docs/images/heroleft1.png';
+        _this.spriteLeft2.src = '../docs/images/heroleft2.png';
+        _this.spriteDown1.src = '../docs/images/herodown1.png';
+        _this.spriteDown2.src = '../docs/images/herodown2.png';
+        _this.spriteRight1.src = '../docs/images/heroright1.png';
+        _this.spriteRight2.src = '../docs/images/heroright2.png';
         _this.sprite = _this.spriteDown1;
         document.addEventListener('keydown', _this.move.bind(_this));
         return _this;
@@ -126,7 +126,7 @@ var Map = (function () {
         this.x = 0;
         this.y = 0;
         this.sprite = new Image(4096, 4096);
-        this.sprite.src = '../dist/images/map.png';
+        this.sprite.src = '../docs/images/map.png';
         console.log(this.sprite);
     }
     Map.prototype.draw = function () {
