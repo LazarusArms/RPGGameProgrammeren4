@@ -27,14 +27,14 @@ class Hero extends GameObject implements IMove {
         this.spriteRight1 = new Image(100, 200);
         this.spriteRight2 = new Image(100, 200);
 
-        this.spriteUp1.src = '../dist/images/heroup1.png';
-        this.spriteUp2.src = '../dist/images/heroup2.png';
-        this.spriteLeft1.src = '../dist/images/heroleft1.png';
-        this.spriteLeft2.src = '../dist/images/heroleft2.png';
-        this.spriteDown1.src = '../dist/images/herodown1.png';
-        this.spriteDown2.src = '../dist/images/herodown2.png';
-        this.spriteRight1.src = '../dist/images/heroright1.png';
-        this.spriteRight2.src = '../dist/images/heroright2.png';
+        this.spriteUp1.src = '../docs/images/heroup1.png';
+        this.spriteUp2.src = '../docs/images/heroup2.png';
+        this.spriteLeft1.src = '../docs/images/heroleft1.png';
+        this.spriteLeft2.src = '../docs/images/heroleft2.png';
+        this.spriteDown1.src = '../docs/images/herodown1.png';
+        this.spriteDown2.src = '../docs/images/herodown2.png';
+        this.spriteRight1.src = '../docs/images/heroright1.png';
+        this.spriteRight2.src = '../docs/images/heroright2.png';
 
         this.sprite = this.spriteDown1;
 
