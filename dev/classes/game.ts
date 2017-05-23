@@ -20,8 +20,6 @@ class Game {
         this.map = new Map();
 
         requestAnimationFrame(() => this.update());
-
-
     }
 
 
