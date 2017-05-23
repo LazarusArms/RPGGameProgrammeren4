@@ -5,6 +5,8 @@
 
 De game is te spelen via de live omgeving van github, als je het wilt forken is het letterlijk forken -> compilen en gaan.
 
+https://cobesz.github.io/RPGGameProgrammeren4/docs/
+
 ## Programmeerprincipes toegepast
 
 **Interface**

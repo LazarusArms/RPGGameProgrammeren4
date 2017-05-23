@@ -16,10 +16,10 @@ class Game {
 
         this.context = this.canvas.getContext('2d');
 
-        requestAnimationFrame(() => this.update());
-
         this.hero = new Hero();
         this.map = new Map();
+
+        requestAnimationFrame(() => this.update());
     }
 
 

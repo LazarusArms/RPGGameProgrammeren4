@@ -87,6 +87,5 @@ class Hero extends GameObject implements IMove {
                 this.sprite = this.spriteDown1;
             }
         }
-        // console.log(this.x);
     }
 }
