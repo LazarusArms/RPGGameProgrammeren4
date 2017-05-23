@@ -1,12 +1,5 @@
-class Game {
-    
-    constructor() {
+/// <reference path="classes/game.ts" />
 
-    }
-} 
-
-
-// load
-window.addEventListener("load", function() {
-    new Game();
+window.addEventListener("load", function () {
+    let g = Game.getInstance();
 });
