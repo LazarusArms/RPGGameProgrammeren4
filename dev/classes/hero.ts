@@ -10,12 +10,16 @@ class Hero extends GameObject implements IMove {
     private spriteDown2: HTMLImageElement;
     private spriteRight1: HTMLImageElement;
     private spriteRight2: HTMLImageElement;
+    private behaviour: Behaviour;
+    protected health : number;
 
     constructor() {
         super();
         this.x = 0;
         this.y = 0;
         this.speed = 5;
+        this.health = 10;
+        this.behaviour = new Alive();
 
 
         this.spriteUp1 = new Image(100, 200);
@@ -39,8 +43,12 @@ class Hero extends GameObject implements IMove {
         this.sprite = this.spriteDown1;
 
         document.addEventListener('keydown', this.move.bind(this));
+        this.update();
     }
 
+    public update() {
+        this.behaviour.update(this.health);
+    }
 
     public move(event: KeyboardEvent) {
         // PRESS LEFT ARROW
