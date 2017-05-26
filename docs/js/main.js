@@ -1,13 +1,8 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Game = (function () {
     function Game() {
         var _this = this;
@@ -15,9 +10,9 @@ var Game = (function () {
         this.canvas.width = Game.width;
         this.canvas.height = Game.height;
         this.context = this.canvas.getContext('2d');
-        requestAnimationFrame(function () { return _this.update(); });
         this.hero = new Hero();
         this.map = new Map();
+        requestAnimationFrame(function () { return _this.update(); });
     }
     Game.prototype.update = function () {
         var _this = this;
@@ -37,13 +32,27 @@ var Game = (function () {
         }
         return Game.instance;
     };
+    Game.width = window.innerWidth;
+    Game.height = window.innerHeight;
     return Game;
 }());
-Game.width = window.innerWidth;
-Game.height = window.innerHeight;
 window.addEventListener("load", function () {
     var g = Game.getInstance();
 });
+var Alive = (function () {
+    function Alive() {
+    }
+    Alive.prototype.update = function (health) {
+        console.log(health);
+        if (health < 1) {
+            alert('Game over!');
+        }
+        else {
+            console.log('You are alive!');
+        }
+    };
+    return Alive;
+}());
 var GameObject = (function () {
     function GameObject() {
     }
@@ -57,30 +66,35 @@ var GameObject = (function () {
 var Hero = (function (_super) {
     __extends(Hero, _super);
     function Hero() {
-        var _this = _super.call(this) || this;
-        _this.x = 0;
-        _this.y = 0;
-        _this.speed = 5;
-        _this.spriteUp1 = new Image(100, 200);
-        _this.spriteUp2 = new Image(100, 200);
-        _this.spriteLeft1 = new Image(100, 200);
-        _this.spriteLeft2 = new Image(100, 200);
-        _this.spriteDown1 = new Image(100, 200);
-        _this.spriteDown2 = new Image(100, 200);
-        _this.spriteRight1 = new Image(100, 200);
-        _this.spriteRight2 = new Image(100, 200);
-        _this.spriteUp1.src = '../docs/images/heroup1.png';
-        _this.spriteUp2.src = '../docs/images/heroup2.png';
-        _this.spriteLeft1.src = '../docs/images/heroleft1.png';
-        _this.spriteLeft2.src = '../docs/images/heroleft2.png';
-        _this.spriteDown1.src = '../docs/images/herodown1.png';
-        _this.spriteDown2.src = '../docs/images/herodown2.png';
-        _this.spriteRight1.src = '../docs/images/heroright1.png';
-        _this.spriteRight2.src = '../docs/images/heroright2.png';
-        _this.sprite = _this.spriteDown1;
-        document.addEventListener('keydown', _this.move.bind(_this));
-        return _this;
+        _super.call(this);
+        this.x = 0;
+        this.y = 0;
+        this.speed = 5;
+        this.health = 0;
+        this.behaviour = new Alive();
+        this.spriteUp1 = new Image(100, 200);
+        this.spriteUp2 = new Image(100, 200);
+        this.spriteLeft1 = new Image(100, 200);
+        this.spriteLeft2 = new Image(100, 200);
+        this.spriteDown1 = new Image(100, 200);
+        this.spriteDown2 = new Image(100, 200);
+        this.spriteRight1 = new Image(100, 200);
+        this.spriteRight2 = new Image(100, 200);
+        this.spriteUp1.src = '../docs/images/heroup1.png';
+        this.spriteUp2.src = '../docs/images/heroup2.png';
+        this.spriteLeft1.src = '../docs/images/heroleft1.png';
+        this.spriteLeft2.src = '../docs/images/heroleft2.png';
+        this.spriteDown1.src = '../docs/images/herodown1.png';
+        this.spriteDown2.src = '../docs/images/herodown2.png';
+        this.spriteRight1.src = '../docs/images/heroright1.png';
+        this.spriteRight2.src = '../docs/images/heroright2.png';
+        this.sprite = this.spriteDown1;
+        document.addEventListener('keydown', this.move.bind(this));
+        this.update();
     }
+    Hero.prototype.update = function () {
+        this.behaviour.update(this.health);
+    };
     Hero.prototype.move = function (event) {
         if (event.keyCode == 37) {
             this.x -= this.speed;
