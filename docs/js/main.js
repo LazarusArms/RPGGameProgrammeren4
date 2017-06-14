@@ -15,12 +15,14 @@ var Game = (function () {
         this.canvas.width = Game.width;
         this.canvas.height = Game.height;
         this.context = this.canvas.getContext('2d');
-        requestAnimationFrame(function () { return _this.update(); });
         this.hero = new Hero();
+        this.jelly = new Jelly(this.hero);
         this.map = new Map();
+        requestAnimationFrame(function () { return _this.update(); });
     }
     Game.prototype.update = function () {
         var _this = this;
+        this.hero.update();
         this.draw();
         requestAnimationFrame(function () { return _this.update(); });
     };
@@ -30,6 +32,7 @@ var Game = (function () {
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.map.draw();
         this.hero.draw();
+        this.jelly.draw();
     };
     Game.getInstance = function () {
         if (!Game.instance) {
@@ -44,8 +47,22 @@ Game.height = window.innerHeight;
 window.addEventListener("load", function () {
     var g = Game.getInstance();
 });
+var Alive = (function () {
+    function Alive() {
+    }
+    Alive.prototype.update = function (health) {
+        if (health < 1) {
+            alert('Game over!');
+        }
+        else {
+        }
+    };
+    return Alive;
+}());
 var GameObject = (function () {
     function GameObject() {
+        this.speedHorizontal = 0;
+        this.speedVertical = 0;
     }
     GameObject.prototype.draw = function () {
         Game.getInstance().context.drawImage(this.sprite, this.x, this.y);
@@ -54,13 +71,39 @@ var GameObject = (function () {
     };
     return GameObject;
 }());
+var Map = (function () {
+    function Map() {
+        this.x = 0;
+        this.y = 0;
+        this.sprite = new Image(4096, 4096);
+        this.sprite.src = '../docs/images/map.png';
+        console.log(this.sprite);
+    }
+    Map.prototype.draw = function () {
+        Game.getInstance().context.drawImage(this.sprite, this.x, this.y);
+    };
+    Map.prototype.update = function () {
+    };
+    return Map;
+}());
+var Enemy = (function (_super) {
+    __extends(Enemy, _super);
+    function Enemy() {
+        return _super.call(this) || this;
+    }
+    Enemy.prototype.notify = function (x, y) {
+    };
+    return Enemy;
+}(GameObject));
 var Hero = (function (_super) {
     __extends(Hero, _super);
     function Hero() {
         var _this = _super.call(this) || this;
+        _this.observers = [];
         _this.x = 0;
         _this.y = 0;
-        _this.speed = 5;
+        _this.health = 10;
+        _this.behaviour = new Alive();
         _this.spriteUp1 = new Image(100, 200);
         _this.spriteUp2 = new Image(100, 200);
         _this.spriteLeft1 = new Image(100, 200);
@@ -78,12 +121,31 @@ var Hero = (function (_super) {
         _this.spriteRight1.src = '../docs/images/heroright1.png';
         _this.spriteRight2.src = '../docs/images/heroright2.png';
         _this.sprite = _this.spriteDown1;
-        document.addEventListener('keydown', _this.move.bind(_this));
+        document.addEventListener('keydown', _this.onKeyDown.bind(_this));
+        document.addEventListener('keyup', _this.onKeyUp.bind(_this));
+        _this.update();
         return _this;
     }
-    Hero.prototype.move = function (event) {
-        if (event.keyCode == 37) {
-            this.x -= this.speed;
+    Hero.prototype.update = function () {
+        this.x += this.speedHorizontal;
+        this.y += this.speedVertical;
+        if (this.speedVertical > 0 || this.speedHorizontal > 0) {
+            for (var _i = 0, _a = this.observers; _i < _a.length; _i++) {
+                var o = _a[_i];
+                o.notify(this.speedHorizontal, this.speedVertical);
+            }
+        }
+        if (this.speedVertical < 0 || this.speedHorizontal < 0) {
+            for (var _b = 0, _c = this.observers; _b < _c.length; _b++) {
+                var o = _c[_b];
+                o.notify(this.speedHorizontal, this.speedVertical);
+            }
+        }
+        this.behaviour.update(this.health);
+    };
+    Hero.prototype.onKeyDown = function (event) {
+        if (event.key == 'ArrowLeft') {
+            this.speedHorizontal = -5;
             if (this.sprite === this.spriteLeft1) {
                 this.sprite = this.spriteLeft2;
             }
@@ -91,8 +153,8 @@ var Hero = (function (_super) {
                 this.sprite = this.spriteLeft1;
             }
         }
-        else if (event.keyCode == 38) {
-            this.y -= this.speed;
+        else if (event.key == 'ArrowUp') {
+            this.speedVertical = -5;
             if (this.sprite === this.spriteUp1) {
                 this.sprite = this.spriteUp2;
             }
@@ -100,8 +162,8 @@ var Hero = (function (_super) {
                 this.sprite = this.spriteUp1;
             }
         }
-        else if (event.keyCode == 39) {
-            this.x += this.speed;
+        else if (event.key == 'ArrowRight') {
+            this.speedHorizontal = 5;
             if (this.sprite === this.spriteRight1) {
                 this.sprite = this.spriteRight2;
             }
@@ -109,8 +171,8 @@ var Hero = (function (_super) {
                 this.sprite = this.spriteRight1;
             }
         }
-        else if (event.keyCode == 40) {
-            this.y += this.speed;
+        else if (event.key == 'ArrowDown') {
+            this.speedVertical = 5;
             if (this.sprite === this.spriteDown1) {
                 this.sprite = this.spriteDown2;
             }
@@ -119,21 +181,78 @@ var Hero = (function (_super) {
             }
         }
     };
+    Hero.prototype.onKeyUp = function (e) {
+        if (e.key == 'ArrowLeft') {
+            this.speedHorizontal = 0;
+        }
+        else if (e.key == 'ArrowRight') {
+            this.speedHorizontal = 0;
+        }
+        else if (e.key == 'ArrowUp') {
+            this.speedVertical = 0;
+        }
+        else if (e.key == 'ArrowDown') {
+            this.speedVertical = 0;
+        }
+    };
+    Hero.prototype.subscribe = function (o) {
+        this.observers.push(o);
+    };
+    Hero.prototype.unsubscribe = function (o) {
+    };
     return Hero;
 }(GameObject));
-var Map = (function () {
-    function Map() {
-        this.x = 0;
-        this.y = 0;
-        this.sprite = new Image(4096, 4096);
-        this.sprite.src = '../docs/images/map.png';
-        console.log(this.sprite);
+var Jelly = (function (_super) {
+    __extends(Jelly, _super);
+    function Jelly(h) {
+        var _this = _super.call(this) || this;
+        _this.hero = h;
+        _this.x = 20;
+        _this.y = 20;
+        _this.speedHorizontal = 5;
+        _this.health = 10;
+        _this.behaviour = new Alive();
+        _this.spriteUp1 = new Image(100, 200);
+        _this.spriteUp2 = new Image(100, 200);
+        _this.spriteLeft1 = new Image(100, 200);
+        _this.spriteLeft2 = new Image(100, 200);
+        _this.spriteDown1 = new Image(100, 200);
+        _this.spriteDown2 = new Image(100, 200);
+        _this.spriteRight1 = new Image(100, 200);
+        _this.spriteRight2 = new Image(100, 200);
+        _this.spriteUp1.src = '../docs/images/jelly1.png';
+        _this.spriteUp2.src = '../docs/images/jelly2.png';
+        _this.spriteLeft1.src = '../docs/images/jelly1.png';
+        _this.spriteLeft2.src = '../docs/images/jelly2.png';
+        _this.spriteDown1.src = '../docs/images/jelly1.png';
+        _this.spriteDown2.src = '../docs/images/jelly2.png';
+        _this.spriteRight1.src = '../docs/images/jelly1.png';
+        _this.spriteRight2.src = '../docs/images/jelly2.png';
+        _this.sprite = _this.spriteDown1;
+        _this.hero.subscribe(_this);
+        _this.update();
+        return _this;
     }
-    Map.prototype.draw = function () {
-        Game.getInstance().context.drawImage(this.sprite, this.x, this.y);
+    Jelly.prototype.update = function () {
+        console.log("hij hier komen");
+        this.behaviour.update(this.health);
     };
-    Map.prototype.update = function () {
+    Jelly.prototype.notify = function (x, y) {
+        var random = Math.random() * 20;
+        console.log(random);
+        if (x > 0) {
+            this.x += random;
+        }
+        if (y > 0) {
+            this.y += random;
+        }
+        if (x < 0) {
+            this.x -= random;
+        }
+        if (y < 0) {
+            this.y -= random;
+        }
     };
-    return Map;
-}());
+    return Jelly;
+}(Enemy));
 //# sourceMappingURL=main.js.map
