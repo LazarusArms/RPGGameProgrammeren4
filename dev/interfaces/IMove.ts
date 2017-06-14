@@ -1,3 +1,3 @@
 interface IMove {
-    move(event: KeyboardEvent): void;
+    // move(event: KeyboardEvent): void;
 }

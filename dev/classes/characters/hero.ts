@@ -1,6 +1,8 @@
-///<reference path="gameObject.ts"/>
+///<reference path="../gameObject.ts"/>
 
-class Hero extends GameObject implements IMove {
+class Hero extends GameObject implements IMove, Subject {
+
+    public observers: Array<Observer> = [];
 
     private spriteUp1: HTMLImageElement;
     private spriteUp2: HTMLImageElement;
@@ -11,13 +13,12 @@ class Hero extends GameObject implements IMove {
     private spriteRight1: HTMLImageElement;
     private spriteRight2: HTMLImageElement;
     private behaviour: Behaviour;
-    protected health : number;
+    protected health: number;
 
     constructor() {
         super();
         this.x = 0;
         this.y = 0;
-        this.speed = 5;
         this.health = 10;
         this.behaviour = new Alive();
 
@@ -42,18 +43,33 @@ class Hero extends GameObject implements IMove {
 
         this.sprite = this.spriteDown1;
 
-        document.addEventListener('keydown', this.move.bind(this));
+        document.addEventListener('keydown', this.onKeyDown.bind(this));
+        document.addEventListener('keyup', this.onKeyUp.bind(this));
         this.update();
+
+
     }
 
     public update() {
+        this.x += this.speedHorizontal;
+        this.y += this.speedVertical;
+
+        // als speed > 0 notify
+        if(this.speedVertical > 0 || this.speedHorizontal > 0) {
+            for(let o of this.observers) {
+                o.notify();
+            }
+        }
+
         this.behaviour.update(this.health);
     }
 
-    public move(event: KeyboardEvent) {
+    public onKeyDown(event: KeyboardEvent) {
         // PRESS LEFT ARROW
-        if (event.keyCode == 37) {
-            this.x -= this.speed;
+        // if (event.keyCode == 37) {
+        if (event.key == 'ArrowLeft') {
+            this.speedHorizontal = -5;
+            // this.x -= this.speedHorizontal;
             if (this.sprite === this.spriteLeft1) {
                 this.sprite = this.spriteLeft2;
             }
@@ -63,8 +79,9 @@ class Hero extends GameObject implements IMove {
 
         }
         // PRESS UP ARROW
-        else if (event.keyCode == 38) {
-            this.y -= this.speed;
+        // else if (event.keyCode == 38) {
+        else if (event.key == 'ArrowUp') {
+            this.speedVertical = -5;
 
             if (this.sprite === this.spriteUp1) {
                 this.sprite = this.spriteUp2;
@@ -74,8 +91,9 @@ class Hero extends GameObject implements IMove {
             }
         }
         // PRESS RIGHT ARROW
-        else if (event.keyCode == 39) {
-            this.x += this.speed;
+        // else if (event.keyCode == 39) {
+        else if (event.key == 'ArrowRight') {
+            this.speedHorizontal = 5;
 
             if (this.sprite === this.spriteRight1) {
                 this.sprite = this.spriteRight2;
@@ -85,8 +103,9 @@ class Hero extends GameObject implements IMove {
             }
         }
         // PRESS DOWN ARROW
-        else if (event.keyCode == 40) {
-            this.y += this.speed;
+        // else if (event.keyCode == 40) {
+        else if (event.key == 'ArrowDown') {
+            this.speedVertical = 5;
 
             if (this.sprite === this.spriteDown1) {
                 this.sprite = this.spriteDown2;
@@ -96,4 +115,31 @@ class Hero extends GameObject implements IMove {
             }
         }
     }
+
+    private onKeyUp(e : KeyboardEvent) {
+        if(e.key == 'ArrowLeft') {
+            this.speedHorizontal = 0;
+        }
+
+        else if (e.key == 'ArrowRight') {
+            this.speedHorizontal = 0;
+        }
+
+        else if (e.key == 'ArrowUp') {
+            this.speedVertical = 0;
+        }
+        else if (e.key == 'ArrowDown') {
+            this.speedVertical = 0;
+        }
+    }
+
+    subscribe(o: Observer) {
+        this.observers.push(o);
+    }
+
+    unsubscribe(o: Observer) {
+    }
+
+
+
 }
