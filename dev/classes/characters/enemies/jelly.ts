@@ -47,20 +47,26 @@ class Jelly extends Enemy {
 
     notify(x, y) {
 
-        console.log(x);
-        console.log(y);
+        let random = Math.random() * 20;
 
-        if(x > 0 || y > 0){
-            this.x += 5;
-            this.y += 5;
+        // console.log(x);
+        // console.log(y);
+        console.log(random);
+
+        if(x > 0){
+            this.x += random;
         }
 
-        if(x < 0 || y < 0){
-            this.x -= 5;
-            this.y -= 5;
+        if(y > 0) {
+            this.y += random;
         }
-        // this.x += 5;
-        console.log(this);
+
+        if(x < 0){
+            this.x -= random;
+        }
+
+        if(y < 0) {
+            this.y -= random;
+        }
     }
-
 }
