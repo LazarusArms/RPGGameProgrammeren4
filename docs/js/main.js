@@ -89,7 +89,9 @@ var Map = (function () {
 var Enemy = (function (_super) {
     __extends(Enemy, _super);
     function Enemy() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.random = Math.random();
+        return _this;
     }
     Enemy.prototype.notify = function (x, y) {
     };
@@ -207,50 +209,61 @@ var Jelly = (function (_super) {
     function Jelly(h) {
         var _this = _super.call(this) || this;
         _this.hero = h;
-        _this.x = 20;
-        _this.y = 20;
+        _this.x = _this.random * 2000;
+        _this.y = _this.random * 2000;
         _this.speedHorizontal = 5;
         _this.health = 10;
         _this.behaviour = new Alive();
         _this.spriteUp1 = new Image(100, 200);
         _this.spriteUp2 = new Image(100, 200);
-        _this.spriteLeft1 = new Image(100, 200);
-        _this.spriteLeft2 = new Image(100, 200);
-        _this.spriteDown1 = new Image(100, 200);
-        _this.spriteDown2 = new Image(100, 200);
-        _this.spriteRight1 = new Image(100, 200);
-        _this.spriteRight2 = new Image(100, 200);
         _this.spriteUp1.src = '../docs/images/jelly1.png';
         _this.spriteUp2.src = '../docs/images/jelly2.png';
-        _this.spriteLeft1.src = '../docs/images/jelly1.png';
-        _this.spriteLeft2.src = '../docs/images/jelly2.png';
-        _this.spriteDown1.src = '../docs/images/jelly1.png';
-        _this.spriteDown2.src = '../docs/images/jelly2.png';
-        _this.spriteRight1.src = '../docs/images/jelly1.png';
-        _this.spriteRight2.src = '../docs/images/jelly2.png';
-        _this.sprite = _this.spriteDown1;
+        _this.sprite = _this.spriteUp1;
+        console.log(_this.sprite);
         _this.hero.subscribe(_this);
         _this.update();
         return _this;
     }
     Jelly.prototype.update = function () {
-        console.log("hij hier komen");
         this.behaviour.update(this.health);
     };
     Jelly.prototype.notify = function (x, y) {
-        var random = Math.random() * 20;
-        console.log(random);
+        console.log(this.random);
         if (x > 0) {
-            this.x += random;
+            this.x -= this.random * 20;
+            if (this.sprite === this.spriteUp1) {
+                this.sprite = this.spriteUp2;
+            }
+            else {
+                this.sprite = this.spriteUp1;
+            }
         }
-        if (y > 0) {
-            this.y += random;
+        else if (y > 0) {
+            this.y -= this.random * 20;
+            if (this.sprite === this.spriteUp1) {
+                this.sprite = this.spriteUp2;
+            }
+            else {
+                this.sprite = this.spriteUp1;
+            }
         }
-        if (x < 0) {
-            this.x -= random;
+        else if (x < 0) {
+            this.x += this.random * 20;
+            if (this.sprite === this.spriteUp1) {
+                this.sprite = this.spriteUp2;
+            }
+            else {
+                this.sprite = this.spriteUp1;
+            }
         }
-        if (y < 0) {
-            this.y -= random;
+        else if (y < 0) {
+            this.y += this.random * 20;
+            if (this.sprite === this.spriteUp1) {
+                this.sprite = this.spriteUp2;
+            }
+            else {
+                this.sprite = this.spriteUp1;
+            }
         }
     };
     return Jelly;
