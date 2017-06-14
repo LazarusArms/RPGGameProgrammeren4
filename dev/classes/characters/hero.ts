@@ -1,6 +1,6 @@
 ///<reference path="../gameObject.ts"/>
 
-class Hero extends GameObject implements IMove, Subject {
+class Hero extends GameObject implements Subject {
 
     public observers: Array<Observer> = [];
 
@@ -54,10 +54,18 @@ class Hero extends GameObject implements IMove, Subject {
         this.x += this.speedHorizontal;
         this.y += this.speedVertical;
 
+
+
         // als speed > 0 notify
         if(this.speedVertical > 0 || this.speedHorizontal > 0) {
             for(let o of this.observers) {
-                o.notify();
+                o.notify(this.speedHorizontal, this.speedVertical);
+            }
+        }
+
+        if(this.speedVertical < 0 || this.speedHorizontal < 0) {
+            for(let o of this.observers) {
+                o.notify(this.speedHorizontal, this.speedVertical);
             }
         }
 

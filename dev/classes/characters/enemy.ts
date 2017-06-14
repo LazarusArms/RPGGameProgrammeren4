@@ -1,4 +1,4 @@
-class Enemy extends GameObject implements IMove, Observer {
+class Enemy extends GameObject implements Observer {
 
     protected hero;
 
@@ -18,11 +18,9 @@ class Enemy extends GameObject implements IMove, Observer {
 
     }
 
-    move() {
 
-    }
 
-    notify() {
+    notify(x, y) {
 
     }
 }

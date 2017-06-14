@@ -91,9 +91,7 @@ var Enemy = (function (_super) {
     function Enemy() {
         return _super.call(this) || this;
     }
-    Enemy.prototype.move = function () {
-    };
-    Enemy.prototype.notify = function () {
+    Enemy.prototype.notify = function (x, y) {
     };
     return Enemy;
 }(GameObject));
@@ -134,7 +132,13 @@ var Hero = (function (_super) {
         if (this.speedVertical > 0 || this.speedHorizontal > 0) {
             for (var _i = 0, _a = this.observers; _i < _a.length; _i++) {
                 var o = _a[_i];
-                o.notify();
+                o.notify(this.speedHorizontal, this.speedVertical);
+            }
+        }
+        if (this.speedVertical < 0 || this.speedHorizontal < 0) {
+            for (var _b = 0, _c = this.observers; _b < _c.length; _b++) {
+                var o = _c[_b];
+                o.notify(this.speedHorizontal, this.speedVertical);
             }
         }
         this.behaviour.update(this.health);
@@ -226,9 +230,24 @@ var Jelly = (function (_super) {
         _this.spriteRight2.src = '../docs/images/jelly2.png';
         _this.sprite = _this.spriteDown1;
         _this.hero.subscribe(_this);
+        _this.update();
         return _this;
     }
-    Jelly.prototype.notify = function () {
+    Jelly.prototype.update = function () {
+        console.log("hij hier komen");
+        this.behaviour.update(this.health);
+    };
+    Jelly.prototype.notify = function (x, y) {
+        console.log(x);
+        console.log(y);
+        if (x > 0 || y > 0) {
+            this.x += 5;
+            this.y += 5;
+        }
+        if (x < 0 || y < 0) {
+            this.x -= 5;
+            this.y -= 5;
+        }
         console.log(this);
     };
     return Jelly;

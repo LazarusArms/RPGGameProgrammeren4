@@ -31,11 +31,35 @@ class Jelly extends Enemy {
         this.sprite = this.spriteDown1;
 
         this.hero.subscribe(this);
+
+        this.update();
+    }
+
+    public update() {
+
+        console.log("hij hier komen");
+
+        this.behaviour.update(this.health);
     }
 
 
-    notify() {
 
+
+    notify(x, y) {
+
+        console.log(x);
+        console.log(y);
+
+        if(x > 0 || y > 0){
+            this.x += 5;
+            this.y += 5;
+        }
+
+        if(x < 0 || y < 0){
+            this.x -= 5;
+            this.y -= 5;
+        }
+        // this.x += 5;
         console.log(this);
     }
 
