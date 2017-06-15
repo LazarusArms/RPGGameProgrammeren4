@@ -74,4 +74,37 @@ Of nee toch niet.
 
 ![UML](./docs/images/heinrich.jpg?raw=true "heinrich")
 
+# Feedback Week 7: Erhan Akin
+
+Er is veel progressie geboekt sinds de laatste Peer Review. Code is uitgbereid met goeie interactie in de game. Inheritance, Encapsulation Composition, Singleton, Observer & Strategy zijn allemaal verwerkt in je code. Daarnaast is het nice dat jook een interface folder gemaakt heb met daarin de vereisten functies voor elke class.
+Ook het gebruik van static classes is te zien. Game is enigszins speelbaar. Het idee om een nieuwe view toe te voegen in 'battle' modes wekt bij mij heel erg veel enthousiasme op.
+
+Sommige eisen zijn alleen nog niet zichtbaar in de game, zoals het gebruik van een Library. Daarnaast ontbreekt ook enige vorm van enumerations (die ik heb toegevoegd in je game code).
+
+De code is te vinden in gameObject.ts en hero.ts, ik zal die ook even hieronder vermelden ter verduidelijking:
+
+-> In gameObject.ts:
+
+enum isDead {
+    YES,
+    NO
+    }
+
+&
+
+protected isDead: isDead = isDead.NO;
+
+
+-> In hero.ts:
+
+dead(){
+        this.isDead = isDead.YES;
+        console.log('YOU DIED');
+    }
+
+De Enumeration is hierbij toegevoegd als opvulling.
+
+
+
+
 

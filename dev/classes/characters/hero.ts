@@ -150,4 +150,10 @@ class Hero extends GameObject implements Subject {
     unsubscribe(o: Observer) {
     }
 
+    dead(){
+        this.isDead = isDead.YES;
+        console.log('YOU DIED');
+
+    }
+
 }

@@ -1,3 +1,9 @@
+enum isDead {
+    YES,
+    NO
+}
+
+
 abstract class GameObject implements IDrawable {
     public x: number;
     public y: number;
@@ -8,6 +14,8 @@ abstract class GameObject implements IDrawable {
     protected speedVertical : number = 0;
 
     protected sprite: HTMLImageElement;
+
+    protected isDead: isDead = isDead.NO;
 
     constructor() {
 
@@ -21,4 +29,5 @@ abstract class GameObject implements IDrawable {
     public update() {
 
     }
+
 }
