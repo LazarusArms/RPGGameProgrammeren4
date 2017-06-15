@@ -1,6 +1,7 @@
 class Game {
     private static instance: Game;
     private hero: Hero;
+    private jelly: Jelly;
     private map: Map;
 
     public canvas: HTMLCanvasElement;
@@ -17,6 +18,7 @@ class Game {
         this.context = this.canvas.getContext('2d');
 
         this.hero = new Hero();
+        this.jelly = new Jelly(this.hero);
         this.map = new Map();
 
         requestAnimationFrame(() => this.update());
@@ -24,6 +26,16 @@ class Game {
 
 
     private update(): void {
+        this.hero.update();
+
+        //collision
+        if(Utils.checkCollision(this.hero, this.jelly)) {
+            // console.log("Fuck you");
+            Battlescreen.getInstance();
+            this.canvas.remove();
+        }
+
+
         this.draw();
         requestAnimationFrame(() => this.update());
     }
@@ -35,6 +47,7 @@ class Game {
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.map.draw();
         this.hero.draw();
+        this.jelly.draw();
 
     }
 
@@ -44,4 +57,7 @@ class Game {
         }
         return Game.instance;
     }
+
+
+
 }
